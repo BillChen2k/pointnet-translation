@@ -1,0 +1,81 @@
+\label{sec:related}
+\begin{comment}
+\todo{\\
+  \paragraph{3d point cloud processing:}
+  \begin{itemize}
+    \item classification
+    \item segmentation
+    % \item correspondence
+  \end{itemize} 
+  traditionally, each 3d data processing task depends on some specific pipeline. our framework unifies them together.
+  
+  \paragraph{point cloud features:}
+  \begin{itemize}
+    \item global features
+    \item local features
+  \end{itemize}
+  most works use hand-crafted features. 
+
+  \paragraph{deep learning on 3d data:}
+  \begin{itemize}
+    \item multi-view CNN
+    \item volumetric CNN
+    \item spectral CNN on meshes 
+    \item non end-to-end approach
+  \end{itemize}
+  in previous work of deep learning on point clouds, a point cloud is first converted to one of the above forms. however, there lacks work that directly operates on a raw point set.
+
+  \paragraph{deep learning on unordered sets}
+  \begin{itemize}
+    \item discuss ``OrderMatters'', by Vinyals et al.
+    \item say that this is a rather fundamental problem, related to many other tasks
+  \end{itemize} 
+}
+\end{comment}
+
+\paragraph{点云特征}
+点云大部分的现有特征都是针对特定任务手工制作的。点特征通常编码某些统计特性，并且被设计成对于某些变换是不变的，这些变换通常被划分为内在的
+\cite{aubry2011wave, sun2009concise, bronstein2010scale} 或外在的 ~\cite{rusu2008aligning, rusu2009fast, ling2007shape, johnson1999using, chen2003visual}。  它们还可以归类为局部特征和全局特征。对于特定任务，找到最优的特征组合并非易事。
+
+%While one can extract all kinds of features and let a machine learning model decide which ones to use, the success of CNNs~\cite{lecun2015deep} for 2D images convinces us that an end-to-end feature learning paradigm is more promising. In this work we present a unified point feature learning network that can easily adapts to different tasks.
+
+% \paragraph{Point Cloud Features}
+% Most existing features for point cloud are handcrafted towards specific tasks. According to the spatial scopes, they can be categorized as local features and global features. Point features often encode certain statistical properties of points and are designed to be invariant to certain transformations, which are typically classified as being intrinsic [WKS, HKS] or extrinsic [PFH, FPFH, D2, spin image, LFD].
+
+% Often one feature that works on task A may not perform well on task B. In addition, different features often make different assumptions of where the point cloud comes from. For example, HKS and WKS features work very well on organic objects such as human bodies, but they are not suitable for describing CAD models with combinatorial structures. For a specific task, it is not trivial to find the optimal feature combination for the task. 
+
+% While one can extract all kinds of features and let a machine learning model to decide which ones to use, the success of CNNs [CITE] for 2D images convinces us that an end-to-end feature learning paradigm is more promising. In this work we present a unified point feature learning network that can easily adapts to different tasks, such as classification, segmentation, retrieval and correspondence. Our network directly works on point sets, due to its flexibility and broad usage in real applications.
+
+
+\paragraph{3D数据的深度学习}
+% \todo{we need to argue why point cloud (most close to raw sensor data), instead of meshes (not canonical), volume (sparsity), projected images (not in 3D, non-trivial to choose viewpoints) somewhere in the paper.}
+
+3D数据具有多种流行的表示形式，从而有各种学习方法。
+\emph{Volumetric CNNs:}~\cite{wu20153d, maturana2015voxnet, qi2016volumetric} 这是在体素形状上应用3D卷积神经网络的先驱。然而，由于数据的稀疏性和3D卷积的计算成本，体积表示受到其分辨率的限制。FPNN~\cite{li2016fpnn} 和 Vote3D~\cite{wang2015voting} 提出了处理稀疏性问题的特殊方法；然而，他们的操作仍然是在稀疏的体积上，处理非常大的点云对他们来说是一种挑战。
+\emph{Multiview CNNs:}~\cite{su15mvcnn, qi2016volumetric} 试图将3D点云或形状渲染成2D图像，然后应用2D卷积神经网络对它们进行分类。通过精心设计的图像CNN，这一系列方法在形状分类和检索任务方面取得了突出的性能表现。~\cite{savvashrec}. 然而，将它们扩展到场景理解或其他3D任务例如点分类、形状完成上时表现很普通。
+\emph{Spectral CNNs:} 最近的一些工作~\cite{bruna2013spectral, masci2015geodesic}在网格上使用了光谱CNN。但是这些方法目前受限于流形网格（例如有机物体），而且如何将它们扩展到非等距形状（例如家具）上并不明显。
+\emph{Feature-based DNNs:}~\cite{fang20153d,guo20153d} 首先通过提取传统的形状特征将3D数据转换成向量，然后使用全连接网络对形状进行分类。我们认为它们受限于所提取特征的表示能力。
+
+% In our work, we do deep learning directly on the raw 3D representation -- point clouds, without the pre-processing stage of converting them to volumes, images, graphs, or feature vectors. Therefore, our method has the potential to greatly simply the pipeline in practical usage.
+
+% We argue that point cloud is a good representation in many aspects: 1) it's raw -- point clouds are the data acquired directly from depth sensors or laser scans, not like volumes or images that suffer from information loss. 2) it's in 3D, not like projected images that lack 3D geometry, which may require additional cross-view consistency mechanisms. 3) it's compact, not like volumetric grids that stores a 2D manifold surface in full 3D space. We design special networks to consume 3D point clouds and show that our network can be easily adapted for various 3D tasks with very good performance.
+
+
+% Volumetric CNNs: [3DShapeNets, voxnet, our cvpr work] are the pioneers applying 3D convolutional neural networks on voxelized shapes. However, since sensors can only reach the surfaces of objects, most 3D data are just 2D manifold/surface living in a 3D space, thus volumetric grids are often sparse. Besides, the storage and computation cost both grow cubically with the input resolution. To address this challenge, [FPNN and vote3D] propose special methods to deal with the sparsity of volumetric representation; however, their operations are still performed on a very sparse volume and it is still challenging for them to process very large point clouds.
+
+% Multiview CNNs: [MVCNN, our cvpr work, and some other image based methods] have tried to render 3D point cloud or shapes into 2D images and then apply 2D convolutional neural networks (using existing architectures such as AlexNet and VGG fine-tuned from ImageNet) to classify the shapes. With the well engineered image CNNs, this line of methods have achieved dominating performance on shape classification and retrieval tasks [cite SHREC]. However, it's nontrivial to extend them to scene understanding (not clear which camera positions to take), or other 3D tasks such as point classification and shape completion. Besides, when projecting 3D into images, we always have to convert predictions and data back and forth between 2D and 3D.
+
+% Spectral CNNs: There has also been latest work that use spectral CNNs on meshes. However, these methods are currently constrained on manifold meshes such as organic objects and it's not obvious how to extend them to non-isometric shapes with sophisticated topological and geometric variations, such as furniture. Besides, acquiring meshes or point graphs require significant efforts in post processing from raw sensor data.
+
+% Feature-based DNNs: [deep3dshape and Beihang's paper] firstly convert the 3D data into a vector, by extracting traditional shape features (HKS and WKS) and then use a fully connected neural network to classify the shape. We think they are constrained by the representation power of the features extracted.
+
+% In our work, we do deep learning directly on the raw 3D representation -- point clouds, without the pre-processing stage of converting them to volumes, images, graphs, or feature vectors. Therefore, our method has the potential to greatly simply the pipeline in practical usage. We argue that point cloud is a good representation in many aspects: 1) it's raw -- point clouds are the data acquired directly from depth sensors or laser scans, not like volumes or images that suffer from information loss. 2) it's in 3D, not like projected images that lack 3D geometry, which may require additional cross-view consistency mechanisms. 3) it's compact, not like volumetric grids that stores a 2D manifold surface in full 3D space. We design special networks to consume 3D point clouds and show that our network can be easily adapted for various 3D tasks with very good performance.
+
+
+\paragraph{无序集的深度学习}
+
+从数据结构的角度来说，点云是无序的向量集合。当大部分深度学习工作集中在规则输入表示，如序列（语音和语言处理）、图像和体积（视频或3D数据）上时，很少有在点集上做深度学习工作的。
+
+Oriol Vinyals等人最近的一项工作~\cite{vinyals2015order}研究了这个问题。他们使用具有注意机制的读取-处理-写入网络来处理无序输入集，同时展示他们的网络具有对数字进行排序的能力。然而，由于他们的工作重点是泛型集合和NLP应用，因此缺少了几何体在集合中的作用。
+
+% Our work exploits the geometry properties in 3D point sets, provides theoretical analysis to what has been learned, gives rich visualizations to help understand the model. Our work also targets towards real applications of object classification and segmentation.
